@@ -77,6 +77,28 @@ export class SoftwareArchitectureAggregate {
         return this.getAllBusinessDomains(this.businessDomains);
     }
 
+    public getActiveApplicationsIntegratedToOrFromApplication(applicationId: string): ApplicationEntity[] {
+        const id: Id = new Id(applicationId);
+
+        const integrationsToOrFrom = this.integrations.filter(integration => {
+            return integration.toApplicationId.equals(id) || integration.fromApplicationId.equals(id);
+        });
+
+        const applicationIdsIntegratedToOrFrom : Id[] = this.allApplications.filter(application => {
+            if (application.id.equals(id)) {
+                return true;
+            }
+
+            return integrationsToOrFrom.some(integration => {
+                return integration.toApplicationId.equals(application.id) || integration.fromApplicationId.equals(application.id);
+            });
+        }).map(application => application.id);
+
+        const applicationsIntegratedToOrFrom = this.getActiveApplications(this.applications, applicationIdsIntegratedToOrFrom)
+
+        return applicationsIntegratedToOrFrom;
+    }
+
     private getActiveApplications(applications: ApplicationEntity[], applicationIdFilter?: Id[]): ApplicationEntity[] {
         const applicationsWithIntegrationsIds = [
             ...this.integrations.map(integration => integration.fromApplicationId.value),
@@ -158,22 +180,30 @@ export class SoftwareArchitectureAggregate {
         return this.getAllApplications(this.applications);
     }
 
-    // private flattenApplications(applications: ApplicationEntity[]): ApplicationEntity[] {
-    //     const flattenedApplications = applications.flatMap(application => {
-    //         return [
-    //             application,
-    //             ...this.flattenApplications(application.childApplications)
-    //         ];
-    //     });
+    private flattenApplications(applications: ApplicationEntity[]): ApplicationEntity[] {
+        const flattenedApplications = applications.flatMap(application => {
+            return [
+                application,
+                ...this.flattenApplications(application.childApplications)
+            ];
+        });
         
-    //     return flattenedApplications;
-    // }
+        return flattenedApplications;
+    }
+
+    public getIntegrationsForApplication(application: ApplicationEntity): IntegrationEntity[] {
+        const integrations = this.integrations.filter(integration => {
+            return application.id.equals(integration.fromApplicationId) || application.id.equals(integration.toApplicationId);
+        });
+
+        return integrations;
+    }
 
     public getIntegrationsForApplications(applications: ApplicationEntity[]): IntegrationEntity[] {
-        // const flattenedApplications = this.flattenApplications(applications);
+        const flattenedApplications = this.flattenApplications(applications);
 
         const integrations = this.integrations.filter(integration => {
-            return this.allApplications.some(application => {
+            return flattenedApplications.some(application => {
                 return application.id.equals(integration.fromApplicationId) || application.id.equals(integration.toApplicationId);
             });
         });

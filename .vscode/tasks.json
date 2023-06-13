@@ -12,6 +12,11 @@
             "label": "diagrams/flowchart-for-each-domain-architecture",
             "type": "shell",
             "command": "npx ts-node src/tasks/flowchart-for-each-domain-architecture.task.ts"
+        },
+        {
+            "label": "diagrams/flowchart-for-each-application-architecture",
+            "type": "shell",
+            "command": "npx ts-node src/tasks/flowchart-for-each-application-architecture.task.ts"
         }
     ]
 }

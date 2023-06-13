@@ -9,8 +9,8 @@ import { MermaidRepository } from "../../../infrastructure/repositories/mermaid.
 import { SoftwareArchitectureExcelRepository } from "../../../infrastructure/repositories/software-architecture-excel.repository"
 import { MermaidFlowchartPresenter } from "../shared/mermaid-flowchart.presenter";
 
-export class FlowchartForEachDomainArchitectureController {
-    private readonly FILE_NAME = 'flowchart-domain-architecture';
+export class FlowchartForEachApplicationArchitectureController {
+    private readonly FILE_NAME = 'flowchart-application-architecture';
     private readonly mermaidRepository: MermaidRepository;
     private readonly MermaidFlowchartPresenter: MermaidFlowchartPresenter;
     private readonly softwareArchitectureExcelRepository: SoftwareArchitectureExcelRepository;
@@ -22,6 +22,7 @@ export class FlowchartForEachDomainArchitectureController {
     }
 
     public async get(): Promise<void> {
+        console.log('FlowchartForEachApplicationArchitectureController.get');
         const applicationDtoToApplicationEntityMapper: ApplicationDtoToApplicationEntityMapper = new ApplicationDtoToApplicationEntityMapper();
         const integrationDtoToIntegrationEntityMapper: IntegrationDtoToIntegrationEntityMapper = new IntegrationDtoToIntegrationEntityMapper();
         const requirementDtoToEntityMapper: RequirementDtoToEntityMapper = new RequirementDtoToEntityMapper();
@@ -35,18 +36,19 @@ export class FlowchartForEachDomainArchitectureController {
             businessDomainDtoToEntityMapper
         );
 
-        for (const businessDomain of softwareArchitecture.allBusinessDomains) {
-            const activeApplicationsForDomain: ApplicationEntity[] = softwareArchitecture.getActiveApplicationsForDomain(businessDomain.id.value);
-            const integrationsForApplications: IntegrationEntity[] = softwareArchitecture.getIntegrationsForDomain(businessDomain.id.value);
-    
+        for (const application of softwareArchitecture.allApplications) {
+            console.log('FlowchartForEachApplicationArchitectureController.get.application', application.id.value);
+            const applicationsIntegratedToOrFromApplication: ApplicationEntity[] = softwareArchitecture.getActiveApplicationsIntegratedToOrFromApplication(application.id.value);
+            const integrationsForApplications: IntegrationEntity[] = softwareArchitecture.getIntegrationsForApplication(application);
+
             const mermaidContent = this.MermaidFlowchartPresenter.present({
-                applications: activeApplicationsForDomain,
+                applications: applicationsIntegratedToOrFromApplication,
                 integrations: integrationsForApplications,
                 direction: 'LR'
             });
-
-            const fileName: string = this.FILE_NAME + '-' + businessDomain.id.value;
-
+    
+            const fileName: string = this.FILE_NAME + '-' + application.id.value;
+    
             await this.mermaidRepository.saveMermaidFile(fileName, mermaidContent);
             await this.mermaidRepository.saveExistingMermaidFileAsPng(fileName);
         }

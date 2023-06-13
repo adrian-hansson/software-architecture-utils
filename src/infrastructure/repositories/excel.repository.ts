@@ -1,4 +1,11 @@
-const XLSX = require('xlsx');
+// import * as XLSX from 'xlsx/xlsx.mjs';
+// import * as fs from 'fs';
+// XLSX.set_fs(fs);
+// import { Readable } from 'stream';
+// XLSX.stream.set_readable(Readable);
+// import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
+// XLSX.set_cptable(cpexcel);
+var XLSX = require("xlsx");
 
 export class ExcelRepository {
     private readonly DATA_PATH = 'data/input';
@@ -11,3 +18,4 @@ export class ExcelRepository {
         return jsonData;
     }
 }
+
