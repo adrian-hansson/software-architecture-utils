@@ -1,3 +1,3 @@
 export const sanitizeText = (text: string): string => {
-    return text.replace('"', '');
+    return text.replace(/"/g, "");
 }
