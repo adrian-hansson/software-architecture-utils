@@ -56,7 +56,7 @@ export class SoftwareArchitectureExcelRepository implements SoftwareArchitecture
     async getRequirements(): Promise<RequirementDto[]> {
         const requirementsData: RequirementData[] = await this.excelRepository.loadExcelSheet<RequirementData>(this.DATA_PATH, this.REQUIREMENTS_SHEET);
         const requirementsDto: RequirementDto[] = requirementsData
-            .filter(requirementData => requirementData.id)
+            .filter(requirementData => requirementData.id && requirementData.name)
             .map(requirementData => ({
                 id: sanitizeId(requirementData.id),
                 name: sanitizeText(requirementData.name),
@@ -68,7 +68,7 @@ export class SoftwareArchitectureExcelRepository implements SoftwareArchitecture
     async getBusinessDomains(): Promise<BusinessDomainDto[]> {
         const businessDomainsData: BusinessDomainData[] = await this.excelRepository.loadExcelSheet<BusinessDomainData>(this.DATA_PATH, this.BUSINESS_DOMAINS_SHEET);
         const businessDomainsDto: BusinessDomainDto[] = businessDomainsData
-            .filter(businessDomainData => businessDomainData.id)
+            .filter(businessDomainData => businessDomainData.id && businessDomainData.name)
             .map(businessDomainData => ({
                 id: sanitizeId(businessDomainData.id),
                 name: sanitizeText(businessDomainData.name),
