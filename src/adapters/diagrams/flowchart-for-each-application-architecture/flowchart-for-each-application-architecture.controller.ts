@@ -41,6 +41,10 @@ export class FlowchartForEachApplicationArchitectureController {
             const applicationsIntegratedToOrFromApplication: ApplicationEntity[] = softwareArchitecture.getActiveApplicationsIntegratedToOrFromApplication(application.id.value);
             const integrationsForApplications: IntegrationEntity[] = softwareArchitecture.getIntegrationsForApplication(application);
 
+            if (integrationsForApplications.length === 0) {
+                continue;
+            }
+
             const mermaidContent = this.MermaidFlowchartPresenter.present({
                 applications: applicationsIntegratedToOrFromApplication,
                 integrations: integrationsForApplications,
