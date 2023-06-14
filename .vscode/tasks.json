@@ -17,6 +17,11 @@
             "label": "diagrams/flowchart-for-each-application-architecture",
             "type": "shell",
             "command": "npx ts-node src/tasks/flowchart-for-each-application-architecture.task.ts"
+        },
+        {
+            "label": "diagrams/export-all-mmd-as-png",
+            "type": "shell",
+            "command": "src/tasks/export-all-mmd-as-png.task.ps1"
         }
     ]
 }
