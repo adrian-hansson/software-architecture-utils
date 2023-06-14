@@ -10,7 +10,7 @@ import { SoftwareArchitectureExcelRepository } from "../../../infrastructure/rep
 import { MermaidFlowchartPresenter } from "../shared/mermaid-flowchart.presenter";
 
 export class FlowchartForEachApplicationArchitectureController {
-    private readonly FILE_NAME = 'flowchart-application-architecture';
+    private readonly FILE_NAME = 'flow-app';
     private readonly mermaidRepository: MermaidRepository;
     private readonly MermaidFlowchartPresenter: MermaidFlowchartPresenter;
     private readonly softwareArchitectureExcelRepository: SoftwareArchitectureExcelRepository;
