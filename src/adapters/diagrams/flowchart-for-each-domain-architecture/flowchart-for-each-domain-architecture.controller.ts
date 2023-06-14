@@ -38,6 +38,10 @@ export class FlowchartForEachDomainArchitectureController {
         for (const businessDomain of softwareArchitecture.allBusinessDomains) {
             const activeApplicationsForDomain: ApplicationEntity[] = softwareArchitecture.getActiveApplicationsForDomain(businessDomain.id.value);
             const integrationsForApplications: IntegrationEntity[] = softwareArchitecture.getIntegrationsForDomain(businessDomain.id.value);
+
+            if (integrationsForApplications.length === 0) {
+                continue;
+            }
     
             const mermaidContent = this.MermaidFlowchartPresenter.present({
                 applications: activeApplicationsForDomain,
