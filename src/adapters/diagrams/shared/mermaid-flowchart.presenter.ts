@@ -6,7 +6,7 @@ export class MermaidFlowchartPresenter implements Presenter<any, string> {
     private presentApplicationAsSubgraph(application: ApplicationEntity, suffix: string = ''): string {
         let content: string = '';
 
-        content += `${suffix}subgraph ${application.id.value}[${application.name.value}]\n`;
+        content += `${suffix}subgraph ${application.id.value}["${application.name.value}"]\n`;
         content += this.presentApplicationsAsSubgraph(application.childApplications, `${suffix}  `);        
         content += `${suffix}end\n`;
 
